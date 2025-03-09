@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Etsy Image Extractor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        input[type="text"] { width: 400px; padding: 8px; }
+        button { padding: 8px 20px; background: #007bff; color: white; border: none; }
+        #result { margin-top: 20px; }
+        a { color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Etsy店铺图片提取器</h1>
+    <form id="shopForm">
+        <input type="text" id="shop_url" placeholder="输入Etsy店铺URL，如：https://www.etsy.com/shop/ShopName" required>
+        <button type="submit">开始提取</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('shopForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('shop_url').value;
+            fetch('/get_images', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `shop_url=${encodeURIComponent(url)}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = data.length ? 
+                    `<h3>找到${data.length}张图片：</h3>` + data.map(url => `<p><a href="${url}" target="_blank">${url}</a></p>`).join('') : 
+                    "<p>未找到图片，请检查URL是否正确</p>";
+            })
+            .catch(err => {
+                document.getElementById('result').innerHTML = "<p>请求失败，请稍后重试</p>";
+            });
+        });
+    </script>
+</body>
+</html>
