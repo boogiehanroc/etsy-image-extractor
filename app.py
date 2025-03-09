@@ -44,7 +44,6 @@ def get_images():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # 关键修改
     app.run(host='0.0.0.0', port=port)  # 关键修改
-# 在app.py文件末尾保持以下结构
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
